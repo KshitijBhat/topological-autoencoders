@@ -7,6 +7,9 @@ import torch
 import numpy as np
 import pandas as pd
 
+from sacred import SETTINGS
+SETTINGS.CONFIG.READ_ONLY_CONFIG = False
+
 from src.callbacks import Callback, SaveReconstructedImages, \
     SaveLatentRepresentation, Progressbar
 from src.datasets.splitting import split_validation
