@@ -45,8 +45,8 @@ def Spheres():
     }
 
 @ingredient.named_config
-def DytoSt_KITTI():
-    name ='DytoSt_KITTI'
+def DytoStKITTIDataset():
+    name ='DytoStKITTIDataset'
     parameters = {
     }
 
