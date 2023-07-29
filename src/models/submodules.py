@@ -801,3 +801,62 @@ class DeepVAE(AutoencoderModel):
         loss = likelihood + kl_div
         reconst_error = self.reconst_error(x, (reconstruction - 0.5)*2  )
         return loss, {'loss.likelihood': likelihood, 'loss.kl_divergence': kl_div, 'reconstruction_error': reconst_error}
+
+
+class DeepAE_64_128(AutoencoderModel):
+    """1000-500-250-2-250-500-1000."""
+    def __init__(self, input_dims=(3, 64, 128)):
+        super().__init__()
+        self.input_dims = input_dims
+        n_input_dims = np.prod(input_dims)
+        self.encoder = nn.Sequential(
+            View((-1, n_input_dims)),
+            nn.Linear(n_input_dims, 1000),
+            nn.ReLU(True),
+            nn.BatchNorm1d(1000),
+            nn.Linear(1000, 500),
+            nn.ReLU(True),
+            nn.BatchNorm1d(500),
+            nn.Linear(500, 250),
+            nn.ReLU(True),
+            nn.BatchNorm1d(250),
+            nn.Linear(250, 2)
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(2, 250),
+            nn.ReLU(True),
+            nn.BatchNorm1d(250),
+            nn.Linear(250, 500),
+            nn.ReLU(True),
+            nn.BatchNorm1d(500),
+            nn.Linear(500, 1000),
+            nn.ReLU(True),
+            nn.BatchNorm1d(1000),
+            nn.Linear(1000, n_input_dims),
+            View((-1,) + tuple(input_dims)),
+            nn.Tanh()
+        )
+        self.reconst_error = nn.MSELoss()
+
+    def encode(self, x):
+        """Compute latent representation using convolutional autoencoder."""
+        return self.encoder(x)
+
+    def decode(self, z):
+        """Compute reconstruction using convolutional autoencoder."""
+        return self.decoder(z)
+
+    def forward(self, x, x_static):
+        """Apply autoencoder to batch of input images.
+
+        Args:
+            x: Batch of images with shape [bs x channels x n_row x n_col]
+
+        Returns:
+            tuple(reconstruction_error, dict(other errors))
+
+        """
+        latent = self.encode(x)
+        x_output = self.decode(latent)
+        reconst_error = self.reconst_error(x_static, x_output)
+        return reconst_error, {'reconstruction_error': reconst_error}
