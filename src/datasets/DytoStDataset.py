@@ -12,7 +12,7 @@ npyf = 15
 
 
 class DytoStKITTIDataset(torch.utils.data.Dataset):
-    def __init__(self):
+    def __init__(self, train=True):
         super(DytoStKITTIDataset, self).__init__()
         dataroot = "/home/prashant/scratch/data/kitti/range_image/scan"
 
