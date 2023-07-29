@@ -35,7 +35,7 @@ class TopologicallyRegularizedAutoencoder(AutoencoderModel):
         distances = torch.norm(x_flat[:, None] - x_flat, dim=2, p=p)
         return distances
 
-    def forward(self, x):
+    def forward(self, x, x_static):
         """Compute the loss of the Topologically regularized autoencoder.
 
         Args:
@@ -65,7 +65,7 @@ class TopologicallyRegularizedAutoencoder(AutoencoderModel):
         latent_distances = latent_distances / self.latent_norm
 
         # Use reconstruction loss of autoencoder
-        ae_loss, ae_loss_comp = self.autoencoder(x)
+        ae_loss, ae_loss_comp = self.autoencoder(x, x_static)
 
         topo_error, topo_error_components = self.topo_sig(
             x_distances, latent_distances)

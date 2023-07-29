@@ -79,15 +79,18 @@ class TrainingLoop():
             if self.on_epoch_begin(remove_self(locals())):
                 break
 
-            for batch, (img, label) in enumerate(train_loader):
+            for batch, (data) in enumerate(train_loader):
+                dynamic = data['dynamic']
+                static = data['static']
                 if self.device == 'cuda':
-                    img = img.cuda(non_blocking=True)
+                    dynamic = dynamic.cuda(non_blocking=True)
+                    static = static.cuda(non_blocking=True)
 
                 self.on_batch_begin(remove_self(locals()))
 
                 # Set model into training mode and compute loss
                 model.train()
-                loss, loss_components = self.model(img)
+                loss, loss_components = self.model(dynamic, static)
 
                 # Optimize
                 optimizer.zero_grad()

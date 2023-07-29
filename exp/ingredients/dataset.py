@@ -44,6 +44,12 @@ def Spheres():
     parameters = {
     }
 
+@ingredient.named_config
+def DytoSt_KITTI():
+    name ='DytoSt_KITTI'
+    parameters = {
+    }
+
 @ingredient.capture
 def get_instance(name, parameters, _log, **kwargs):
     """Get an instance of a model according to parameters in the configuration.
