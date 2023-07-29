@@ -122,9 +122,12 @@ class LogDatasetLoss(Callback):
 
         for batch in self.data_loader:
             data, _ = batch
+            data_dy = data['dynamic']
+            data_st = data['static']
             if self.device == 'cuda':
-                data = data.cuda(non_blocking=True)
-            loss, loss_components = model(data)
+                data_dy = data_dy.cuda(non_blocking=True)
+                data_st = data_st.cuda(non_blocking=True)
+            loss, loss_components = model(data_dy, data_st)
             loss = convert_to_base_type(loss)
 
             # Rescale the losses as batch_size might not divide dataset

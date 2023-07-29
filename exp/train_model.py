@@ -101,6 +101,7 @@ def train(n_epochs, batch_size, learning_rate, weight_decay, val_size,
     # pylint: disable=E1120
     model = model_config.get_instance()
     model.to(device)
+    print(model)
 
     callbacks = [
         LogTrainingLoss(_run, print_progress=quiet),
