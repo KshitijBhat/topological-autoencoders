@@ -26,12 +26,13 @@ def get_space(model, dataloader, mode='latent', device='cuda', seed=42):
         #Extract data samples 
         for index, batch in enumerate(dataloader):
             #unpack current batch:
-            image, label = batch
+            dynamic = batch['dynamic']
+            static = batch['static']
 
-            im = image.detach().numpy()
+            im = dynamic.detach().numpy()
             im_flat = im.reshape(im.shape[0], -1)
             full_space.append(im_flat)
-            all_labels.append(label)
+            all_labels.append(static.detach().numpy())
 
         #Concatenate the lists to return arrays of data space and labels
         full_space = np.concatenate(full_space, axis=0)

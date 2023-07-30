@@ -96,7 +96,6 @@ def train(n_epochs, batch_size, learning_rate, weight_decay, val_size,
     train_dataset, validation_dataset = split_validation(
         dataset, val_size, _rnd)
     test_dataset = dataset_config.get_instance(train=False)
-    print(dataset)
 
     # Get model, sacred does some magic here so we need to hush the linter
     # pylint: disable=E1120
@@ -196,11 +195,6 @@ def train(n_epochs, batch_size, learning_rate, weight_decay, val_size,
         if rundir and evaluation['save_latents']:
             df = pd.DataFrame(latent)
             df['labels'] = labels
-            df.to_csv(os.path.join(rundir, 'latents.csv'), index=False)
-            np.savez(
-                os.path.join(rundir, 'latents.npz'),
-                latents=latent, labels=labels
-            )
 
         if rundir and evaluation['save_training_latents']:
             train_dataloader = torch.utils.data.DataLoader(
@@ -218,18 +212,9 @@ def train(n_epochs, batch_size, learning_rate, weight_decay, val_size,
                 latents=train_latent, labels=train_labels
             )
             # Visualize latent space
-            visualize_latents(
-                train_latent, train_labels,
-                save_file=os.path.join(
-                    rundir, 'train_latent_visualization.pdf')
-            )
+            
 
-        if latent.shape[1] == 2 and rundir:
-            # Visualize latent space
-            visualize_latents(
-                latent, labels,
-                save_file=os.path.join(rundir, 'latent_visualization.pdf')
-            )
+
 
         k_min, k_max, k_step = \
             evaluation['k_min'], evaluation['k_max'], evaluation['k_step']
