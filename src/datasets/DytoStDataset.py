@@ -21,8 +21,8 @@ class DytoStKITTIDataset(torch.utils.data.Dataset):
         self.dir_static = os.path.join(dataroot, 'static')
         
 
-        self.A = torch.from_numpy(np.random.random((5, 3, 64, 128))).float()
-        self.B = torch.from_numpy(np.random.random((5, 3, 64, 128))).float()
+        self.A = torch.from_numpy(np.random.random((256, 3, 64, 128))).float()
+        self.B = torch.from_numpy(np.random.random((256, 3, 64, 128))).float()
         # self.C = torch.from_numpy(np.random.random((4541, 1, 64, 128))).float()
 
         
