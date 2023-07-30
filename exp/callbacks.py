@@ -121,9 +121,8 @@ class LogDatasetLoss(Callback):
         model.eval()
 
         for batch in self.data_loader:
-            data, _ = batch
-            data_dy = data['dynamic']
-            data_st = data['static']
+            data_dy = batch['dynamic']
+            data_st = batch['static']
             if self.device == 'cuda':
                 data_dy = data_dy.cuda(non_blocking=True)
                 data_st = data_st.cuda(non_blocking=True)
@@ -133,7 +132,7 @@ class LogDatasetLoss(Callback):
             # Rescale the losses as batch_size might not divide dataset
             # perfectly, this currently is a nop as drop_last is set to True in
             # the constructor.
-            n_instances = len(data)
+            n_instances = len(batch)
             losses['loss'].append(loss*n_instances)
             for loss_component, value in loss_components.items():
                 value = convert_to_base_type(value)

@@ -96,6 +96,7 @@ def train(n_epochs, batch_size, learning_rate, weight_decay, val_size,
     train_dataset, validation_dataset = split_validation(
         dataset, val_size, _rnd)
     test_dataset = dataset_config.get_instance(train=False)
+    print(dataset)
 
     # Get model, sacred does some magic here so we need to hush the linter
     # pylint: disable=E1120

@@ -42,12 +42,13 @@ def get_space(model, dataloader, mode='latent', device='cuda', seed=42):
         #Extract latent codes from latent space
         for index, batch in enumerate(dataloader):
             #unpack current batch:
-            image, label = batch
+            dynamic = batch['dynamic']
+            static = batch['static']
             if device == 'cuda':
-                image = image.cuda(non_blocking=True)
+                dynamic = dynamic.cuda(non_blocking=True)
 
             #feed batch through model:
-            latent = model.encode(image)
+            latent = model.encode(dynamic)
             reconst = model.decode(latent)
 
             #extract latent code and flatten to vector
@@ -59,7 +60,7 @@ def get_space(model, dataloader, mode='latent', device='cuda', seed=42):
 
             #append current latent code and label to list of all 
             full_space.append(latent_flat)
-            all_labels.append(label)
+            all_labels.append(static)
 
         #Concatenate the lists to return arrays of latent codes and labels
         full_space = np.concatenate(full_space, axis=0)

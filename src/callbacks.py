@@ -112,13 +112,8 @@ class SaveLatentRepresentation(Callback):
         self.data_loader = DataLoader(self.dataset, batch_size=batch_size,
                                       drop_last=True, pin_memory=True)
 
-    def on_epoch_end(self, model, dataset, img, epoch, **kwargs):
+    def on_epoch_end(self, model, epoch, **kwargs):
         """Save reconstruction images."""
         model.eval()
         latents, labels = get_space(model, self.data_loader, mode='latent',
                                     device=self.device)
-        visualize_latents(
-            latents,
-            labels,
-            save_file=os.path.join(self.path, f'latent_epoch_{epoch}.png')
-        )
