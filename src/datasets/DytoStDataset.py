@@ -21,20 +21,12 @@ class DytoStKITTIDataset(torch.utils.data.Dataset):
         self.dir_static = os.path.join(dataroot, 'static')
         
 
-        self.A = torch.from_numpy(np.random.random((256, 3, 64, 128))).float()
-        self.B = torch.from_numpy(np.random.random((256, 3, 64, 128))).float()
+        # self.A = torch.from_numpy(np.random.random((256, 3, 64, 128))).float()
+        # self.B = torch.from_numpy(np.random.random((256, 3, 64, 128))).float()
         # self.C = torch.from_numpy(np.random.random((4541, 1, 64, 128))).float()
 
         
-        #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
-
-        ###################################################### SKIP data code
-
         
-
-        print("A SHAPE: ", self.A.shape)
-        
-        """
         st1 = []
         dy1 = []
 
@@ -45,13 +37,13 @@ class DytoStKITTIDataset(torch.utils.data.Dataset):
 
         for i in npy:
             # (64 128)
-            # dy = np.load(self.dir_dynamic+f"/{i}.npy")[:,:,:,::8]
-            # st = np.load(self.dir_static+f"/{i}.npy")[:,:,:,::8]
-            # ma = np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8]
-            print("Loading data: ", i)
+            dy = np.load(self.dir_dynamic+f"/{i}.npy")[:,:,:,::8]
+            st = np.load(self.dir_static+f"/{i}.npy")[:,:,:,::8]
+            
             # (16 128)
-            dy = np.load(self.dir_dynamic+f"/{i}.npy")[:,:,::4,::8]
-            st = np.load(self.dir_static+f"/{i}.npy")[:,:,::4,::8]
+            # dy = np.load(self.dir_dynamic+f"/{i}.npy")[:,:,::4,::8]
+            # st = np.load(self.dir_static+f"/{i}.npy")[:,:,::4,::8]
+            print("Loading data: ", self.dir_dynamic+f"/{i}.npy")
 
             st1.append(st[::skip[i]])
             dy1.append(dy[::skip[i]])
@@ -61,18 +53,9 @@ class DytoStKITTIDataset(torch.utils.data.Dataset):
         st1 = np.concatenate(st1, axis=0)
         dy1 = np.concatenate(dy1, axis=0)
         
-        
-        # For 64,128
-        #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_dynamics = np.concatenate([np.load(self.dir_dynamic+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_statics = np.concatenate([np.load(self.dir_static+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 64, 1024) -> (4541, 64, 128)
-        # all_masks = np.concatenate([np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8] for i in range(NUM_DATA)])
-         
         self.A = torch.from_numpy(dy1)
         self.B = torch.from_numpy(st1)
-        """
+        
         
 
 
@@ -121,27 +104,6 @@ class TestDytoStKITTIDataset(torch.utils.data.Dataset):
         self.dir_dynamic = os.path.join(dataroot, 'dynamic')
         self.dir_static = os.path.join(dataroot, 'static')
         
-        # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-
-        
-        # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,5:45] for i in range(2)])))
-        # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,:,::4] for i in range(2)])))
-        # import pdb; pdb.set_trace()
-        # self.B = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,:,:,::4] for i in range(2)])))
-        # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,0] for i in tqdm(range(16))]))
-        # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,:1,:,::4] for i in range(2)]))
-        
-
-        # self.A = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
-        # self.B = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
-        # self.C = torch.from_numpy(np.random.random((4541, 1, 64, 128))).float()
-
-        
-        #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
-
-        ###################################################### SKIP data code
-
-
         
         # (64 128)
         # dy = np.load(self.dir_dynamic+f"/8.npy")[:,:,:,::8]
@@ -154,14 +116,7 @@ class TestDytoStKITTIDataset(torch.utils.data.Dataset):
 
         print(f"Shapes: dy {dy.shape} st {st.shape}")   
                
-        # For 64,128
-        #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_dynamics = np.concatenate([np.load(self.dir_dynamic+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_statics = np.concatenate([np.load(self.dir_static+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 64, 1024) -> (4541, 64, 128)
-        # all_masks = np.concatenate([np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8] for i in range(NUM_DATA)])
-         
+
         self.A = torch.from_numpy(dy)
         self.B = torch.from_numpy(st)
 
@@ -175,8 +130,8 @@ class TestDytoStKITTIDataset(torch.utils.data.Dataset):
         # A = np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,5:45] for i in range(16)])
         # B = torch.tensor(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,5:45] for i in range(16)]))
         # C_ = torch.tensor(cv2.dilate(C_.view(256, 256).numpy(), np.ones((3, 3), dtype=np.uint8), 2)).view(1, 256, 256)
-        return {'label': A,
-                'image': B}
+        return {'dynamic': A,
+                'static': B}
 
     def __len__(self):
         return self.A.shape[0]
@@ -195,26 +150,6 @@ class DytoStCARLADataset(torch.utils.data.Dataset):
         super(DytoStCARLADataset, self).__init__()
         dataroot = "/home/prashant/scratch/data/DSLR/lidar/"
 
-        
-        # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-
-        
-        # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,5:45] for i in range(2)])))
-        # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,:,::4] for i in range(2)])))
-        # import pdb; pdb.set_trace()
-        # self.B = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,:,:,::4] for i in range(2)])))
-        # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,0] for i in tqdm(range(16))]))
-        # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,:1,:,::4] for i in range(2)]))
-        
-
-        # self.A = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
-        # self.B = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
-        # self.C = torch.from_numpy(np.random.random((4541, 1, 64, 128))).float()
-
-        
-        #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
-
-        ###################################################### SKIP data code
 
         st1 = []
         dy1 = []
@@ -269,8 +204,8 @@ class DytoStCARLADataset(torch.utils.data.Dataset):
         # A = np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,5:45] for i in range(16)])
         # B = torch.tensor(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,5:45] for i in range(16)]))
         # C_ = torch.tensor(cv2.dilate(C_.view(256, 256).numpy(), np.ones((3, 3), dtype=np.uint8), 2)).view(1, 256, 256)
-        return {'label': A,
-                'image': B,}
+        return {'dynamic': A,
+                'static': B,}
 
     def __len__(self):
         return self.A.shape[0]
@@ -288,26 +223,6 @@ class TestDytoStCARLADataset(torch.utils.data.Dataset):
     def __init__(self):
         super(TestDytoStCARLADataset, self).__init__()
         dataroot = "/home/prashant/scratch/data/DSLR/lidar/"
-
-        # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-
-        
-        # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,5:45] for i in range(2)])))
-        # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,:,::4] for i in range(2)])))
-        # import pdb; pdb.set_trace()
-        # self.B = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,:,:,::4] for i in range(2)])))
-        # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,0] for i in tqdm(range(16))]))
-        # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,:1,:,::4] for i in range(2)]))
-        
-
-        # self.A = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
-        # self.B = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
-        # self.C = torch.from_numpy(np.random.random((4541, 1, 64, 128))).float()
-
-        
-        #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
-
-        ###################################################### SKIP data code
 
         st1 = []
         dy1 = []
@@ -341,15 +256,6 @@ class TestDytoStCARLADataset(torch.utils.data.Dataset):
         print("ST1 shape:", st1.shape)
         print("DY1 shape:", dy1.shape)
 
-        
-        # For 64,128
-        #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_dynamics = np.concatenate([np.load(self.dir_dynamic+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_statics = np.concatenate([np.load(self.dir_static+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 64, 1024) -> (4541, 64, 128)
-        # all_masks = np.concatenate([np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8] for i in range(NUM_DATA)])
-         
         self.A = torch.from_numpy(dy1)
         self.B = torch.from_numpy(st1)
         
@@ -362,8 +268,8 @@ class TestDytoStCARLADataset(torch.utils.data.Dataset):
         # A = np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,5:45] for i in range(16)])
         # B = torch.tensor(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,5:45] for i in range(16)]))
         # C_ = torch.tensor(cv2.dilate(C_.view(256, 256).numpy(), np.ones((3, 3), dtype=np.uint8), 2)).view(1, 256, 256)
-        return {'label': A,
-                'image': B
+        return {'dynamic': A,
+                'stattic': B
                 }
 
     def __len__(self):
@@ -421,15 +327,7 @@ class DytoStAtiDataset(torch.utils.data.Dataset):
         print("ST1 shape:", st1.shape)
         print("DY1 shape:", dy1.shape)
 
-        
-        # For 64,128
-        #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_dynamics = np.concatenate([np.load(self.dir_dynamic+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_statics = np.concatenate([np.load(self.dir_static+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 64, 1024) -> (4541, 64, 128)
-        # all_masks = np.concatenate([np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8] for i in range(NUM_DATA)])
-         
+     
         self.A = torch.from_numpy(dy1)
         self.B = torch.from_numpy(st1)
         
@@ -443,8 +341,8 @@ class DytoStAtiDataset(torch.utils.data.Dataset):
         # A = np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,5:45] for i in range(16)])
         # B = torch.tensor(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,5:45] for i in range(16)]))
         # C_ = torch.tensor(cv2.dilate(C_.view(256, 256).numpy(), np.ones((3, 3), dtype=np.uint8), 2)).view(1, 256, 256)
-        return {'label': A,
-                'image': B}
+        return {'dynamic': A,
+                'static': B}
 
     def __len__(self):
         return self.A.shape[0]
@@ -502,14 +400,6 @@ class TestDytoStAtiDataset(torch.utils.data.Dataset):
         print("DY1 shape:", dy1.shape)
 
         
-        # For 64,128
-        #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_dynamics = np.concatenate([np.load(self.dir_dynamic+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 3, 64, 1024) -> (4541, 3, 64, 128)
-        # all_statics = np.concatenate([np.load(self.dir_static+f"/{i}.npy")[:,:,:,::8] for i in range(NUM_DATA)]) 
-        # #(4541, 64, 1024) -> (4541, 64, 128)
-        # all_masks = np.concatenate([np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8] for i in range(NUM_DATA)])
-         
         self.A = torch.from_numpy(dy1)
         self.B = torch.from_numpy(st1)
         
@@ -520,11 +410,8 @@ class TestDytoStAtiDataset(torch.utils.data.Dataset):
         B = self.B[index]
 
 
-        # A = np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,5:45] for i in range(16)])
-        # B = torch.tensor(np.concatenate([np.load(self.dir_lidar+f"/d{i}.npy")[:,5:45] for i in range(16)]))
-        # C_ = torch.tensor(cv2.dilate(C_.view(256, 256).numpy(), np.ones((3, 3), dtype=np.uint8), 2)).view(1, 256, 256)
-        return {'label': A,
-                'image': B}
+        return {'dynamic': A,
+                'static': B}
 
     def __len__(self):
         return self.A.shape[0]
